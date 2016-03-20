@@ -1,11 +1,5 @@
 <?php
 
-/**
- * Created by IntelliJ IDEA.
- * User: dpdev
- * Date: 2/24/16
- * Time: 9:49 AM
- */
 require_once('section.php');
 require_once('setting.php');
 
@@ -64,7 +58,7 @@ class Customizer {
                 $setting_label = $setting->buildLabel();
                 $setting_args = $setting->buildArgs();
                 $wp_customize->add_setting($setting_label, $setting_args);
-                if((get_theme_mod($setting_label, true) || get_theme_mod($setting_label, '') == '') && isset($setting_args['default'])){
+                if((get_theme_mod($setting_label, true) === true) && isset($setting_args['default'])){
                     set_theme_mod( $setting_label, $setting_args['default'] );
 //                    error_log($setting_label . '='.$setting_args['default'].'(Newly Saved)');
                 } else {
@@ -113,7 +107,7 @@ class Customizer {
                         break;
                     default:
                         break;
-                }
+                };
             }
         }
 
