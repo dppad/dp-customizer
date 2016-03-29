@@ -1,11 +1,5 @@
 <?php
 
-/**
- * Created by IntelliJ IDEA.
- * User: dpdev
- * Date: 2/24/16
- * Time: 9:49 AM
- */
 require_once('section.php');
 require_once('setting.php');
 
@@ -28,7 +22,6 @@ class Customizer {
             $this->defaults = $default_fields;
         }
         $this->initialize();
-//        error_log('customizer.construct()');
         add_action('customize_register', array($this, 'onCustomizeRegister'));
     }
 
@@ -54,27 +47,14 @@ class Customizer {
 
         foreach ($this->sections as $section) {
             $wp_customize->add_section($section->buildLabel(), $section->buildArgs());
-//            ob_start();
-//            var_dump($section->buildLabel());
-//            var_dump($section->buildArgs());
-//            $content = ob_get_clean();
-//            error_log("customizer.onCustomizeRegister.section.buildArgs:\n" . $content);
 
             foreach ($section->settings as $setting) {
                 $setting_label = $setting->buildLabel();
                 $setting_args = $setting->buildArgs();
                 $wp_customize->add_setting($setting_label, $setting_args);
-                if((get_theme_mod($setting_label, true) || get_theme_mod($setting_label, '') == '') && isset($setting_args['default'])){
+                if((get_theme_mod($setting_label, true) === true) && isset($setting_args['default'])){
                     set_theme_mod( $setting_label, $setting_args['default'] );
-//                    error_log($setting_label . '='.$setting_args['default'].'(Newly Saved)');
-                } else {
-//                    error_log($setting_label . '='.get_theme_mod($setting_label, '[FAILED]').'(Previously Saved)');
                 }
-//                ob_start();
-//                var_dump($setting->buildLabel());
-//                var_dump($setting->buildArgs());
-//                $content = ob_get_clean();
-//                error_log("customizer.onCustomizeRegister.setting.buildArgs:\n" . $content);
             }
 
             foreach ($section->settings as $setting) {
@@ -88,12 +68,6 @@ class Customizer {
                                 $setting->buildControlArgs()
                             )
                         );
-//                        ob_start();
-//                        var_dump($setting->buildLabel());
-//                        var_dump($setting->buildControlArgs());
-//                        $content = ob_get_clean();
-//                        error_log("customizer.onCustomizeRegister.setting.buildControlArgs:\n" . $content);
-//                        error_log('customizer.onCustomizeRegister() - adding control');
                         break;
                     case 'text':
 
@@ -104,16 +78,10 @@ class Customizer {
                                 $setting->buildControlArgs()
                             )
                         );
-//                        ob_start();
-//                        var_dump($setting->buildLabel());
-//                        var_dump($setting->buildControlArgs());
-//                        $content = ob_get_clean();
-//                        error_log("customizer.onCustomizeRegister.setting.buildControlArgs:\n" . $content);
-//                        error_log('customizer.onCustomizeRegister() - adding control');
                         break;
                     default:
                         break;
-                }
+                };
             }
         }
 
