@@ -12,4 +12,5 @@ Text Domain: dp_customizer
 global $customizer_plugin_path;
 $customizer_plugin_path = plugin_dir_path(__FILE__);
 require_once($customizer_plugin_path . 'classes/customizer.php');
+require_once($customizer_plugin_path . 'lib/acf-customizer-patch.php');
 
