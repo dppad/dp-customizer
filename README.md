@@ -10,7 +10,6 @@ $fields = array(
         'setting' => 'footer-bg-img', // Field name. Value retrieved with get_theme_mod('footer-bg-img')
         'label' => 'Footer Background Image', // label above input field
         'type' => 'image', // input type. Only "image" and "text" types currently supported
-        'image_size_' => 'large', // optional image size setting. defaults to large
         'default' => 'https://placehold.it/720x480' // default value
     ),
     
@@ -53,4 +52,8 @@ if (class_exists('Customizer')) {
 
 $facebook_link = get_theme_mod('link-facebook'); // returns "https://www.facebook.com/"
 $image_url = get_theme_mod('footer-bg-img') // returns "https://placehold.it/720x480/"
+$image_data = get_theme_mod('footer-bg-img_data') // returns array of all sizes. Append '_data' to any image theme_mod name to get similar results
+$image_data['large']['url'] // url to large image version
+$image_data['large']['width'] // width of large image version
+$image_data['large']['height'] // height of large image version
 ```
