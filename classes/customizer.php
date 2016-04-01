@@ -6,8 +6,8 @@ require_once('setting.php');
 class Customizer {
     private $defaults = array(
         array(
-            'sectionName' => 'The Section Name',
-            'setting' => 'section-demo',
+            'sectionName' => 'Footer',
+            'setting' => 'footer-image',
             'label' => 'This is the label',
             'type' => 'image',
             'default' => 'http://placehold.it/640x480'
@@ -22,20 +22,13 @@ class Customizer {
             $this->defaults = $default_fields;
         }
         $this->initialize();
-//        error_log('customizer.construct()');
         add_action('customize_register', array($this, 'onCustomizeRegister'));
     }
 
     private function initialize() {
         foreach ($this->defaults as $field_meta) {
             $this->addSection($field_meta['sectionName']);
-
-			$options = array();
-			if(isset($field_meta['image_size'])){
-				$options['image_size'] = $field_meta['image_size'];
-			}
-
-			$this->addSetting( $field_meta['setting'], $field_meta['sectionName'], $field_meta['type'], $field_meta['label'], $field_meta['default'], $options );
+            $this->addSetting($field_meta['setting'], $field_meta['sectionName'], $field_meta['type'], $field_meta['label'], $field_meta['default']);
         }
     }
 
@@ -50,7 +43,6 @@ class Customizer {
     }
 
     function onCustomizeRegister($wp_customize) {
-		require_once('WP_Customize_Image_Data_Control.php');
         //All our sections, settings, and controls will be added here
 
         foreach ($this->sections as $section) {
@@ -59,20 +51,9 @@ class Customizer {
             foreach ($section->settings as $setting) {
                 $setting_label = $setting->buildLabel();
                 $setting_args = $setting->buildArgs();
-				switch ( $setting->type ) {
-					case 'image':
-						$customizer_image_setting = new JT_Customize_Setting_Image_Data( $wp_customize, $setting_label, $setting_args );
-						$customizer_image_setting->setSize($setting->image_size);
-						$wp_customize->add_setting(  );
-						break;
-					default:
                 $wp_customize->add_setting($setting_label, $setting_args);
-				}
-				if ( ( get_theme_mod( $setting_label, true ) === true ) && isset( $setting_args['default'] ) ) {
+                if((get_theme_mod($setting_label, true) === true) && isset($setting_args['default'])){
                     set_theme_mod( $setting_label, $setting_args['default'] );
-//                    error_log($setting_label . '='.$setting_args['default'].'(Newly Saved)');
-                } else {
-//                    error_log($setting_label . '='.get_theme_mod($setting_label, '[FAILED]').'(Previously Saved)');
                 }
             }
 
@@ -100,7 +81,7 @@ class Customizer {
                         break;
                     default:
                         break;
-				};
+                };
             }
         }
 
