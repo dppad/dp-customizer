@@ -7,7 +7,6 @@
  * Time: 9:46 AM
  */
 class Setting {
-
     /**
      * Setting constructor.
      *

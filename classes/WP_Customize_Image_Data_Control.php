@@ -21,8 +21,6 @@ class JT_Customize_Setting_Image_Data extends WP_Customize_Setting {
 
 				if ( $image ) {
 
-					var_dump_log($image, 'image:');
-
 					/* Set up a custom array of data to save. */
 					$data = array(
 						'url'    => esc_url_raw( $image[0] ),
