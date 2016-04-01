@@ -8,7 +8,17 @@
  */
 class Setting {
 
-    public function __construct($setting_name = "DefaultName", $section, $type, $label, $default = 'https://placehold.it/1920x1080') {
+    /**
+     * Setting constructor.
+     *
+     * @param string $setting_name
+     * @param Section $section
+     * @param string $type
+     * @param string $label
+     * @param string $default
+     * @param array $options
+     */
+    public function __construct($setting_name = "DefaultName", $section, $type, $label, $default = 'https://placehold.it/1920x1080', $options = array()) {
         $this->name = $setting_name;
         $this->slug = strtolower($setting_name);
         $this->label = $label;
@@ -16,6 +26,9 @@ class Setting {
         $this->default = $default;
         $this->text_context = $section->text_context;
         $this->section = $section;
+        if(isset($options['image_size'])){
+            $this->image_size = $options['image_size'];
+        }
     }
 
     public function buildLabel() {
