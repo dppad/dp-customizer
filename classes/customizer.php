@@ -1,7 +1,7 @@
 <?php
 
-require_once('section.php');
-require_once('setting.php');
+require_once( 'section.php' );
+require_once( 'setting.php' );
 
 class Customizer {
 	private $defaults = array(
@@ -10,23 +10,24 @@ class Customizer {
 			'setting'     => 'section-demo',
 			'label'       => 'This is the label',
 			'type'        => 'image',
-			'default'     => 'http://placehold.it/640x480'
+			'default'     => 'http://placehold.it/640x480',
+			'image_size'  => 'full'
 		)
 	);
 	private $sections = array();
 	private $settings = array();
 
-    function __construct($text_context, $default_fields) {
-        $this->textContext = $text_context;
-        if(is_array($default_fields)){
-            foreach ($default_fields as $field_meta_index=>$field_meta) {
-                $default_fields[$field_meta_index] = array_merge($this->defaults[0], $field_meta);
-            }
-            $this->defaults = $default_fields;
-        }
-        $this->initialize();
-        add_action('customize_register', array($this, 'onCustomizeRegister'));
-    }
+	function __construct( $text_context, $default_fields ) {
+		$this->textContext = $text_context;
+		if ( is_array( $default_fields ) ) {
+			foreach ( $default_fields as $field_meta_index => $field_meta ) {
+				$default_fields[ $field_meta_index ] = array_merge( $this->defaults[0], $field_meta );
+			}
+			$this->defaults = $default_fields;
+		}
+		$this->initialize();
+		add_action( 'customize_register', array( $this, 'onCustomizeRegister' ) );
+	}
 
 	private function initialize() {
 		foreach ( $this->defaults as $field_meta ) {
@@ -41,11 +42,11 @@ class Customizer {
 		}
 	}
 
-    function addSection($section_name) {
-        if(!isset($this->sections[$section_name])) {
-            $this->sections[$section_name] = new Section($section_name, $this->textContext);
-        }
-    }
+	function addSection( $section_name ) {
+		if ( ! isset( $this->sections[ $section_name ] ) ) {
+			$this->sections[ $section_name ] = new Section( $section_name, $this->textContext );
+		}
+	}
 
 	function addSetting( $setting_name, $section_name = 'Default', $type = 'image', $label = 'Default', $default = '', $options = array() ) {
 		$this->sections[ $section_name ]->addSetting( $setting_name, $type, $label, $default, $options );
@@ -55,8 +56,8 @@ class Customizer {
 		require_once( 'WP_Customize_Image_Data_Control.php' );
 		//All our sections, settings, and controls will be added here
 
-        foreach ($this->sections as $section) {
-            $wp_customize->add_section($section->buildLabel(), $section->buildArgs());
+		foreach ( $this->sections as $section ) {
+			$wp_customize->add_section( $section->buildLabel(), $section->buildArgs() );
 
 			foreach ( $section->settings as $setting ) {
 				$setting_label = $setting->buildLabel();
@@ -65,8 +66,10 @@ class Customizer {
 				switch ( $setting->type ) {
 					case 'image':
 						$customizer_image_setting = new JT_Customize_Setting_Image_Data( $wp_customize, $setting_label, $setting_args );
-						if(property_exists($setting, 'image_size')) $customizer_image_setting->setSize( $setting->image_size );
-						$wp_customize->add_setting($customizer_image_setting);
+						if ( property_exists( $setting, 'image_size' ) ) {
+							$customizer_image_setting->setSize( $setting->image_size );
+						}
+						$wp_customize->add_setting( $customizer_image_setting );
 						break;
 					default:
 						$wp_customize->add_setting( $setting_label, $setting_args );
@@ -76,33 +79,32 @@ class Customizer {
 				}
 
 
+				switch ( $setting->type ) {
+					case 'image':
+						$wp_customize->add_control(
+							new WP_Customize_Image_Control(
+								$wp_customize,
+								$setting->buildLabel(),
+								$setting->buildControlArgs()
+							)
+						);
+						break;
+					case 'text':
 
-                switch ($setting->type) {
-                    case 'image':
-                        $wp_customize->add_control(
-                            new WP_Customize_Image_Control(
-                                $wp_customize,
-                                $setting->buildLabel(),
-                                $setting->buildControlArgs()
-                            )
-                        );
-                        break;
-                    case 'text':
+						$wp_customize->add_control(
+							new WP_Customize_Control(
+								$wp_customize,
+								$setting->buildLabel(),
+								$setting->buildControlArgs()
+							)
+						);
+						break;
+					default:
+						break;
+				};
+			}
+		}
 
-                        $wp_customize->add_control(
-                            new WP_Customize_Control(
-                                $wp_customize,
-                                $setting->buildLabel(),
-                                $setting->buildControlArgs()
-                            )
-                        );
-                        break;
-                    default:
-                        break;
-                };
-            }
-        }
-
-        return $wp_customize;
-    }
+		return $wp_customize;
+	}
 }
