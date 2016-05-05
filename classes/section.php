@@ -18,8 +18,8 @@ class Section {
         $this->text_context = $text_context;
     }
 
-    function addSetting($setting_name, $type, $label, $default) {
-        array_push($this->settings, new Setting($setting_name, $this, $type, $label, $default));
+    function addSetting($setting_name, $type, $label, $default, $options) {
+        array_push($this->settings, new Setting($setting_name, $this, $type, $label, $default, $options));
     }
 
     public function buildLabel() {
