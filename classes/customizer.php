@@ -19,6 +19,9 @@ class Customizer {
     function __construct($text_context, $default_fields) {
         $this->textContext = $text_context;
         if(is_array($default_fields)){
+            foreach ($default_fields as $field_meta_index=>$field_meta) {
+                $default_fields[$field_meta_index] = array_merge($this->defaults[0], $field_meta);
+            }
             $this->defaults = $default_fields;
         }
         $this->initialize();
